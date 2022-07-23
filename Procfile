@@ -1,0 +1,1 @@
+worker: java $JAVA_OPTS -jar target/VolonteerBot-0.0.1-SNAPSHOT.jar
