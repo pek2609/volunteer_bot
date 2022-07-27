@@ -17,6 +17,5 @@ public interface OrderRepository extends BaseRepository<Order> {
     @Query(value = "select o from Order o where o.created = (select min (ord.created) from Order ord)")
     Optional<Order> getMinOrderByCreated();
 
-    @Query(value = "select o from Order o where o.created = (select min (ord.created) from Order ord where ord.botUser.chatId=:id)")
-    Optional<Order> getMinOrderByCreated(@Param("id") Long chatId);
+    boolean existsByBotUserChatId(Long chatId);
 }

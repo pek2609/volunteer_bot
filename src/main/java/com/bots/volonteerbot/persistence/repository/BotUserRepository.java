@@ -10,4 +10,5 @@ public interface BotUserRepository extends BaseRepository<BotUser> {
 
     Optional<BotUser> findByChatId(Long chatId);
 
+    boolean existsByChatId(Long chatId);
 }

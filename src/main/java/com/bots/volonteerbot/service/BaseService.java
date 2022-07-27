@@ -12,6 +12,8 @@ public interface BaseService<E extends BaseEntity> {
 
     void delete(Long id);
 
+    boolean existByChatId(Long chatId);
+
     E findById(Long id);
 
     E findByChatId(Long chatId);

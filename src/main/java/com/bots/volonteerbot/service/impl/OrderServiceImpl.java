@@ -2,6 +2,7 @@ package com.bots.volonteerbot.service.impl;
 
 import com.bots.volonteerbot.cache.OrderCache;
 import com.bots.volonteerbot.exception.EntityNotFoundException;
+import com.bots.volonteerbot.exception.OrderNotFoundException;
 import com.bots.volonteerbot.persistence.datatable.DataTableRequest;
 import com.bots.volonteerbot.persistence.entity.Order;
 import com.bots.volonteerbot.persistence.repository.OrderRepository;
@@ -41,12 +42,17 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.deleteById(id);
     }
 
+    @Override
+    public boolean existByChatId(Long chatId) {
+        return orderRepository.existsByBotUserChatId(chatId);
+    }
+
     @Transactional(readOnly = true)
     @Override
     public Order findById(Long id) {
         Optional<Order> order = orderRepository.findById(id);
         if (order.isEmpty()) {
-            throw new EntityNotFoundException("Запросу не існує");
+            throw new OrderNotFoundException("Запросу не існує");
         }
         return order.get();
     }
@@ -58,7 +64,7 @@ public class OrderServiceImpl implements OrderService {
         if (order == null) {
             final List<Order> orderRep = orderRepository.findByBotUserChatId(chatId);
             if (orderRep.size() == 0) {
-                throw new EntityNotFoundException("Запросу не існує");
+                throw new OrderNotFoundException("Запросу не існує");
             }
             order = orderRep.get(0);
             orderCache.add(order, chatId);

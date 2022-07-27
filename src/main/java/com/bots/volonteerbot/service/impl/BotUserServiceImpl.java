@@ -1,7 +1,7 @@
 package com.bots.volonteerbot.service.impl;
 
 import com.bots.volonteerbot.cache.BotUserCache;
-import com.bots.volonteerbot.exception.EntityNotFoundException;
+import com.bots.volonteerbot.exception.UserNotFoundException;
 import com.bots.volonteerbot.persistence.entity.BotUser;
 import com.bots.volonteerbot.persistence.repository.BotUserRepository;
 import com.bots.volonteerbot.service.BotUserService;
@@ -40,12 +40,17 @@ public class BotUserServiceImpl implements BotUserService {
         botUserRepository.deleteById(id);
     }
 
+    @Override
+    public boolean existByChatId(Long chatId) {
+        return botUserRepository.existsByChatId(chatId);
+    }
+
     @Transactional(readOnly = true)
     @Override
     public BotUser findById(Long id) {
         Optional<BotUser> botUser = botUserRepository.findById(id);
         if (botUser.isEmpty()) {
-            throw new EntityNotFoundException("User not found");
+            throw new UserNotFoundException("User not found");
         }
         return botUser.get();
     }
@@ -57,7 +62,7 @@ public class BotUserServiceImpl implements BotUserService {
         if (botUser == null) {
             final Optional<BotUser> botUserRep = botUserRepository.findByChatId(chatId);
             if (botUserRep.isEmpty()) {
-                throw new EntityNotFoundException("User doesn't exist");
+                throw new UserNotFoundException("User doesn't exist");
             }
             botUser = botUserRep.get();
             botUserCache.add(botUser, chatId);

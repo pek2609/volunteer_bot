@@ -17,7 +17,7 @@ public abstract class BaseEntity {
     private Date updated;
 
     @PreUpdate
-    private void preUpdated(){
+    private void preUpdated() {
         updated = new Date();
     }
 
